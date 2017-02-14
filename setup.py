@@ -31,11 +31,13 @@ def generateIDL():
     warningOrError(errorOnFailure, "Path not found: %s" % idl)
     return
 
-  if 0<>call(["omniidl","-bpython","-Wbglobal=_OMCIDL","-Wbpackage=OMPythonIDL",idl]):
+  if 0!=call(["omniidl","-bpython","-Wbglobal=_OMCIDL","-Wbpackage=OMPythonIDL",idl]):
     warningOrError(errorOnFailure, "omniidl command failed")
     return
   print("Generated OMPythonIDL files")
-generateIDL()
+
+if sys.platform != 'win32':
+  generateIDL()
 
 setup(name='OMPython',
       version='2.0.7',
@@ -49,6 +51,7 @@ setup(name='OMPython',
       packages=['OMPython', 'OMPython.OMParser', 'OMPythonIDL', 'OMPythonIDL._OMCIDL', 'OMPythonIDL._OMCIDL__POA'],
       install_requires=[
         # 'omniORB', # Required, but not part of pypi
-        'pyparsing'
+        'pyparsing',
+        'numpy'
       ]
 )
