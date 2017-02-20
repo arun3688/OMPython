@@ -527,7 +527,7 @@ class ModelicaSystem(object):
         self.outputFlag = False
         self.csvFile = '' #for storing inputs condition
         if not os.path.exists(self.fileName): #if file does not eixt
-            print ("Error: File does not exist!!!")
+            print ("File Error:"+os.path.abspath(self.fileName)+ " does not exist!!!")
             return
 			
         (head, tail) = os.path.split(self.fileName)#to store directory/path and file)
@@ -581,14 +581,15 @@ class ModelicaSystem(object):
                 return
         
         # build model 
-        buildModelError = ''
+        #buildModelError = ''
         self.getconn.sendExpression("setCommandLineOptions(\"+d=initialization\")")
         #buildModelResult=self.getconn.sendExpression("buildModel("+ mName +")")
         buildModelResult = self.requestApi("buildModel", mName)
         buildModelError = self.requestApi("getErrorString")
-
-        if buildModelError:
+        
+        if ('' in buildModelResult):
             print (buildModelError)
+            return
             
         self.xmlFile = buildModelResult[1]
         self.tree = ET.parse(self.xmlFile)
@@ -801,7 +802,10 @@ class ModelicaSystem(object):
         """
         
         try:
-            if self.simulationFlag:
+            if not self.simulationFlag:
+                return self.__getXXXs(names, self.__getOutputNames(), self.__getOutputValues())
+           
+            else:
                 if len(names) == 0:
                     op = self.__getOutputNames()
                     opTuple = tuple(op)
@@ -823,8 +827,8 @@ class ModelicaSystem(object):
                         if len(tupVal) == 1:
                             tupVal, = tupVal
                     return tupVal
-            else:
-                print ('The model is not simulated yet!!!')
+            # else:
+                # print ('The model is not simulated yet!!!')
 
         except Exception:
             if pyparsing.ParseException:
@@ -1118,7 +1122,6 @@ class ModelicaSystem(object):
                 #subprocess.call(cmd, shell = False)
                 self.simulationFlag = True
                 resultfilename=self.modelName+'_res.mat'
-                print ("Simulation success Result file generated at: " +os.path.join(os.getcwd(),resultfilename))
                 return
             else:
                 print ("Error: application file not generated yet")
@@ -1146,7 +1149,6 @@ class ModelicaSystem(object):
                 self.simulationFlag = True
                 #self.outputFlag = True
                 resultfilename=self.modelName+'_res.mat'
-                print ("Simulation success Result file generated at: " +os.path.join(os.getcwd(),resultfilename))
                 return
             else:
                 print ("Error: application file not generated yet")
