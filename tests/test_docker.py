@@ -4,7 +4,6 @@ import tempfile, shutil, os
 import pytest
 
 class DockerTester(unittest.TestCase):
-  @pytest.mark.skip(reason="This test would fail")
   def testDocker(self):
     om = OMPython.OMCSessionZMQ(docker="openmodelica/openmodelica:v1.16.1-minimal")
     assert(om.sendExpression("getVersion()") == "OpenModelica 1.16.1")
