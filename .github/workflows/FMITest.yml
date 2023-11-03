@@ -54,3 +54,4 @@ jobs:
           custom-arguments: 'test_FMIRegression.py -v'
           click-to-expand: true
           report-title: 'FMI Test Report'
+
