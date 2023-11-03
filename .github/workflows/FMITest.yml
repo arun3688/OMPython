@@ -51,7 +51,6 @@ jobs:
           verbose: true
           emoji: true
           job-summary: true
-          custom-arguments: 'test_FMIRegression.py -v'
+          custom-arguments: 'tests/test_FMIRegression.py -v'
           click-to-expand: true
           report-title: 'FMI Test Report'
-
