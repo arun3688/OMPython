@@ -1,6 +1,7 @@
 import OMPython
 import unittest
 import tempfile, shutil, os
+import pytest
 
 class DockerTester(unittest.TestCase):
   def testDocker(self):
